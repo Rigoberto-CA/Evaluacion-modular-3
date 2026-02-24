@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, 
+        initial-scale=1.0">
+    <title>Inventario BroadSonick</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous">
+    <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <!-- Archivos propios -->
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <script defer src="./assets/js/main.js"></script>
+    <link rel="icon" href="./assets/img/favicon.png">
+</head>
+<body class="container-fluid bg-primary-subtle m-0 p-0">
+    <header class="bg-primary p-0 m-0">
+        <h1 class="p-2 h3 mx-3">BroadSonick</h1>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row g-2">
+            <!-- Sección de productos -->
+            <div class="col-8 border border border-primary-subtle rounded-start">
+                <!-- Productos -->
+                <div class="">
+                    <h2 class="h5">Inventario</h2>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <th>
+                                    Producto
+                                </th>
+                                <th>
+                                    Categoría
+                                </th>
+                                <th>
+                                    Precio
+                                </th>
+                                <th>
+                                    Stock
+                                </th>
+                                <th>
+                                    <!--Acciones-->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Plantilla para objeto
+                            <tr>
+                                <td>
+                                    ${id}
+                                </td>
+                                <td>
+                                    ${nombreProducto}
+                                </td>
+                                <td>
+                                    ${categoria}
+                                </td>
+                                <td>
+                                    ${precio}
+                                </td>
+                                <td>
+                                    ${stock}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button class="btn btn-outline-success" data-action="addToCart" data-id="${product.id}">+ Carrito</button>
+                                        <button class="btn btn-outline-primary" data-action="edit" data-id="${product.id}">Editar</button>
+                                        <button class="btn btn-outline-danger" data-action="delete" data-id="${product.id}">Eliminar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Sub-balance -->
+                <div>
+
+                </div>
+            </div>
+
+            <div class="col-4 border border-primary-subtle rounded-end">
+                <!-- Ventas -->
+                <div>
+                    <div>
+                        <h2 class="h5">Ventas</h2>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+                <!-- Abastecimiento -->
+                <div>
+                    <div>
+                        <h2 class="h5">Reposición</h2>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+                <!-- Balance -->
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
