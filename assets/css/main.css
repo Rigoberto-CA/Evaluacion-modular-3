@@ -1,0 +1,12 @@
+/*Titulo Inventario, hace que la etiqueta cambie de posición (comienza abajo, y cambia hacia arriba)*/
+table caption{
+    caption-side: top;
+}
+td#acciones button{
+    width: 2rem;
+    height: 2rem;
+}
+
+#procesoCalculo{
+    background-color: #fff;
+}
