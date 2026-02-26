@@ -76,17 +76,17 @@
                     <div id="procesoCalculo" class="px-2 p-3 rounded border border-1 border-primary">
                         <div id="subTotal" class="d-flex justify-content-between">
                             <p>Subtotal</p>
-                            <p>Subtotal</p>
+                            <p id="subtotalSinIVA">Subtotal</p>
                         </div>
                         <div id="ivaIndividual" class="d-flex justify-content-between">
                             <p>IVA (19%)</p>
-                            <p>19%</p>
+                            <p id="subtotalIVA">19%</p>
                         </div>
                     </div>
                     <div id="totalAPagar" class="px-2 mt-4 bg-primary text-white p-4 rounded">
                         <div id="total" class="d-flex justify-content-between">
                             <p>Total a Pagar:</p>
-                            <p>$0</p>
+                            <p id="totalSuma">$0</p>
                         </div>
                     </div>
                 </div>
@@ -103,7 +103,9 @@
                         <h2 class="h5">Ventas</h2>
                     </div>
                     <div>
-                        <ul id="carroVentas"></ul>
+                        <ul id="carroVentas">
+                            <!-- Acá va el carro de ventas -->
+                        </ul>
                     </div>
                 </div>
                 <!-- Abastecimiento -->
