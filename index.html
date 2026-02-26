@@ -21,6 +21,7 @@
     <script defer src="./assets/js/main.js"></script>
     <link rel="icon" href="./assets/img/favicon.png">
 </head>
+
 <body class="container-fluid bg-primary-subtle m-0 p-0">
     <header class="bg-primary p-0 m-0">
         <h1 class="p-2 h3 mx-3">BroadSonick</h1>
@@ -44,7 +45,7 @@
                                 <th scope="col">Acciones<!--Acciones--></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="productosTbody"> <!-- Acá se agregaran los productos desde JavaScript -->
                             <tr>
                             <th scope="row">1</th>
                             <td>Mark</td>
@@ -70,37 +71,8 @@
                                 <td id="acciones" class="d-flex justify-content-evenly"><button class="d-flex justify-content-center">+</button><button class="d-flex justify-content-center">x</button></td>
                             </tr>
                         </tbody>
-                        </table>
-
-                    
-                            <!-- Plantilla para objeto
-                            <tr>
-                                <td>
-                                    ${id}
-                                </td>
-                                <td>
-                                    ${nombreProducto}
-                                </td>
-                                <td>
-                                    ${categoria}
-                                </td>
-                                <td>
-                                    ${precio}
-                                </td>
-                                <td>
-                                    ${stock}
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button class="btn btn-outline-success" data-action="addToCart" data-id="${product.id}">+ Carrito</button>
-                                        <button class="btn btn-outline-primary" data-action="edit" data-id="${product.id}">Editar</button>
-                                        <button class="btn btn-outline-danger" data-action="delete" data-id="${product.id}">Eliminar</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            -->
-                        </tbody>
                     </table>
+
                     <div id="procesoCalculo" class="px-2 p-3 rounded border border-1 border-primary">
                         <div id="subTotal" class="d-flex justify-content-between">
                             <p>Subtotal</p>
@@ -131,7 +103,7 @@
                         <h2 class="h5">Ventas</h2>
                     </div>
                     <div>
-
+                        <ul id="carroVentas"></ul>
                     </div>
                 </div>
                 <!-- Abastecimiento -->
