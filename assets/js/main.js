@@ -129,8 +129,9 @@ creación de los HTML a insertar
 */
 
 const crearTablaDeProductos = () => {
-    const tablaDelArreglo = productos.map((producto) => 
-        `<tr>
+    const tablaDelArreglo = productos.map(
+        (producto) => `
+        <tr>
             <th scope="row">${producto.id.slice(0, 8)}</th>
             <td>${producto.nombre}</td>
             <td>${producto.categoria}</td>
@@ -138,7 +139,7 @@ const crearTablaDeProductos = () => {
             <td>${producto.stock}</td>
             <td id="acciones" class="d-flex justify-content-evenly">
                 <button id="agregarVenta" 
-                    data-action="agregar" 
+                    data-action="agregarVenta" 
                     data-id="${producto.id} 
                     class="d-flex justify-content-center">+</button>
                 <button id="removerVenta" 
@@ -146,9 +147,9 @@ const crearTablaDeProductos = () => {
                     data-id="${producto.id} 
                     class="d-flex justify-content-center">x</button>
             </td>
-        </tr>`  /*  <= Insertar HTML de la tabla de los objetos*/ ,
+        </tr>`,  /*  <= Insertar HTML de la tabla de los objetos*/
     )
-    return(tablaDelArreglo.join());
+    return(tablaDelArreglo.join(""));
 }
 
 const crearCarroVenta = () => {
@@ -213,8 +214,8 @@ productosTbody.addEventListener("click", (event) => {
 
     const action = button.dataset.action
     const id = button.dataset.id
-
-    if(action === "agregar") {
+    console.log(action);
+    if(action === "agregarVenta") {
         agregarAVenta(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
         updateCartTotals();
