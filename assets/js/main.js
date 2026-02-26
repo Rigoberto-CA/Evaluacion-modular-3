@@ -1,6 +1,15 @@
 console.log("Pudutech trabajando");
 /*
 --------------------------------------
+Configuración
+--------------------------------------
+*/
+
+const sinIVA = 0.81;
+const IVA = 0.19;
+
+/*
+--------------------------------------
 Datos semilla
 --------------------------------------
 */
@@ -49,18 +58,9 @@ const productos = [
     },
 ];
 
-const venta = []
 
-/*
---------------------------------------
-Referencias del DOM
---------------------------------------
-*/
+const venta = [];
 
-const productosTbody = document.querySelector("#productosTbody");
-const carroVentas = document.querySelector("#carroVentas");
-const agregarVentaBtn = document.querySelector("#agregarVenta");
-const removerVenteBtn = document.querySelector("#removerVenta");
 
 /*
 --------------------------------------
@@ -75,23 +75,40 @@ const formateoPrecio = (precio) => {
     }).format(precio);
 }
 
+const calcularTotal = () => {
+    return venta.reduce((accum, item) => {
+        const productoElegido = productos.find(producto => producto.id === item.idProducto);
+        return accum + (productoElegido.precio * item.cantidad);
+    })
+}
+
+const calcularSubtotal = () => {
+    return 
+}
+
+const updateCartTotals = () => {
+    const subTotal = calculateSubTotal()
+    const ivaSubTotal = calculateIVA(subTotal);
+    const total = calculateTotal(subTotal, ivaSubTotal)
+
+    document.querySelector("#subtotalOut").textContent = formatPrice(subTotal);
+    document.querySelector("#ivaOut").textContent =   formatPrice(ivaSubTotal);
+    document.querySelector('#totalOut').textContent = formatPrice(total)
+}
+
 const agregarAVenta = (idProducto) => {
     const productoElegido = productos.find(producto => producto.id === idProducto);
-    console.log(productoElegido);
-    if(productoElegido.stock === 0){
-        alert("Producto sin stock");
-        return;
-    }
+    
+    if(productoElegido.stock === 0) alert("Producto sin stock");
 
-    const productoVenta = venta.find(producto => producto.id === idProducto);
+    const productoVenta = venta.find(producto => producto.idProducto === idProducto);
 
-    if(!productoVenta){
-        if(productoElegido.stock > 0) venta.push({idProducto, cantidad: 1});
+    if(!productoVenta && productoElegido.stock > 0){
+        venta.push({idProducto, cantidad: 1});
     } else {
         if(productoVenta.cantidad < productoElegido.stock) productoVenta.cantidad += 1;
-        if(productoVenta.cantidad === productoElegido.stock) alert("Producto sin stock");
+        if(productoVenta.cantidad === productoElegido.stock) alert("Producto sin más stock");
     }
-    console.log(productoElegido.stock)
 }
 
 
@@ -105,23 +122,32 @@ const disminuirCantidad = (idProducto) => {
     }
 }
 
-const incCantidad = (idProducto) => {
+const incrementarCantidad = (idProducto) => {
     const producto = productos.find(objeto => objeto.id === idProducto);
     const productoVenta = venta.find(objeto => objeto.idProducto === idProducto);
 
     if(productoVenta.cantidad < producto.stock){
-        productoVenta.cantidad += 1;
+        productoVenta.cantidad += 1; //revisar al final si sirve reemplazar con ++
     } else {
         alert("Producto sin stock");
     }
 }
 
-const removerProducto = (id) => {
-    const indiceVenta = venta.findIndex(objeto => objeto.idProducto === id);
+const removerProducto = (idProducto) => {
+    const indiceVenta = venta.findIndex(objeto => objeto.idProducto === idProducto);
     if(indiceVenta !== -1){
         venta.splice(indiceVenta, 1);
     }
 }
+/*
+--------------------------------------
+Referencias del DOM
+--------------------------------------
+*/
+
+const productosTbody = document.querySelector("#productosTbody");
+const carroVentas = document.querySelector("#carroVentas");
+
 /*
 --------------------------------------
 creación de los HTML a insertar
@@ -140,11 +166,11 @@ const crearTablaDeProductos = () => {
             <td id="acciones" class="d-flex justify-content-evenly">
                 <button id="agregarVenta" 
                     data-action="agregarVenta" 
-                    data-id="${producto.id} 
+                    data-id="${producto.id}" 
                     class="d-flex justify-content-center">+</button>
                 <button id="removerVenta" 
                     data-action="remover" 
-                    data-id="${producto.id} 
+                    data-id="${producto.id}" 
                     class="d-flex justify-content-center">x</button>
             </td>
         </tr>`,  /*  <= Insertar HTML de la tabla de los objetos*/
@@ -154,7 +180,7 @@ const crearTablaDeProductos = () => {
 
 const crearCarroVenta = () => {
     const listaVenta = venta.map(objeto => {
-        const productoVenta = productos.find(producto => producto.id === objeto.id);
+        const productoVenta = productos.find(producto => producto.id === objeto.idProducto);
 
         const htmlStringVenta = `
         <li class="list-group-item">
@@ -168,20 +194,21 @@ const crearCarroVenta = () => {
                 <div class="d-flex flex-column align-items-end gap-1">
                     <div class="btn-group btn-group-sm">
                         <button class="btn btn-outline-secondary" 
-                            data-action="descQuantity" 
+                            data-action="disminuirCantidad" 
                             data-id="${productoVenta.id}">-</button>
                         <button class="btn btn-outline-secondary" disabled>${objeto.cantidad}</button>
                         <button class="btn btn-outline-secondary" 
-                            data-action="incQuantity" 
+                            data-action="incrementarCantidad" 
                             data-id="${productoVenta.id}">+</button>
                     </div>
-                    <button class="btn btn-sm btn-outline-danger" data-action="removeCartItem" data-id="${productoVenta.id}">Quitar</button>
+                    <button class="btn btn-sm btn-outline-danger" 
+                        data-action="removerDeVenta" 
+                        data-id="${productoVenta.id}">Quitar</button>
                 </div>
             </div>
         </li>`
         return htmlStringVenta;
     });
-    console.log(htmlStringVenta);
     return listaVenta;
 }
 
@@ -214,14 +241,15 @@ productosTbody.addEventListener("click", (event) => {
 
     const action = button.dataset.action
     const id = button.dataset.id
-    console.log(action);
     if(action === "agregarVenta") {
         agregarAVenta(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
-        updateCartTotals();
         return;
     }
-
+    if(action === "remover"){
+        removerProducto(id);
+        renderHTMLstring(crearCarroVenta(), carroVentas);
+    }
 });
 
 carroVentas.addEventListener("click", (event) => {
@@ -232,22 +260,22 @@ carroVentas.addEventListener("click", (event) => {
 
     if(action === 'disminuirCantidad') {
         disminuirCantidad(id);
-        renderHTMLstring(createCartHTML(), carroVentas);
-        updateCartTotals();
+        renderHTMLstring(crearCarroVenta(), carroVentas);
+        //updateCartTotals();
         return;
     }
 
-    if(action === 'incQuantity') {
-        incQuantity(id);
-        renderHTMLstring(createCartHTML(), carroVentas);
-        updateCartTotals();
+    if(action === 'incrementarCantidad') {
+        incrementarCantidad(id);
+        renderHTMLstring(crearCarroVenta(), carroVentas);
+        //updateCartTotals();
         return
     }
 
-    if(action === "removeCartItem") {
-        deleteProduct(id);
-        renderHTMLstring(createCartHTML(), carroVentas);
-        updateCartTotals();
+    if(action === "removerDeVenta") {
+        removerProducto(id);
+        renderHTMLstring(crearCarroVenta(), carroVentas);
+        //updateCartTotals();
         return
     }
 });
