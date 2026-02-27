@@ -72,23 +72,11 @@
                             </tr>
                         </tbody>
                     </table>
-
-                    <div id="procesoCalculo" class="px-2 p-3 rounded border border-1 border-primary">
-                        <div id="subTotal" class="d-flex justify-content-between">
-                            <p>Subtotal</p>
-                            <p id="subtotalSinIVA">Subtotal</p>
-                        </div>
-                        <div id="ivaIndividual" class="d-flex justify-content-between">
-                            <p>IVA (19%)</p>
-                            <p id="subtotalIVA">19%</p>
-                        </div>
+                    <div class="bg-primary d-flex justify-content-between px-2 pt-2 bg-primary text-white rounded">
+                        <p class="text-light">Total del inventario:</p>
+                        <p class="text-light">$n</p>
                     </div>
-                    <div id="totalAPagar" class="px-2 mt-4 bg-primary text-white p-4 rounded">
-                        <div id="total" class="d-flex justify-content-between">
-                            <p>Total a Pagar:</p>
-                            <p id="totalSuma">$0</p>
-                        </div>
-                    </div>
+                    
                 </div>
                 <!-- Sub-balance -->
                 <div>
@@ -107,6 +95,23 @@
                             <!-- Acá va el carro de ventas -->
                         </ul>
                     </div>
+                    <div id="procesoCalculo" class="px-2 rounded-top border border-1 border-primary">
+                        <div id="subTotal" class="d-flex justify-content-between">
+                            <p>Subtotal</p>
+                            <p id="subtotalSinIVA">Subtotal</p>
+                        </div>
+                        <div id="ivaIndividual" class="d-flex justify-content-between">
+                            <p>IVA (19%)</p>
+                            <p id="subtotalIVA">19%</p>
+                        </div>
+                    </div>
+                    <div id="totalAPagar" class="px-2 bg-primary text-white rounded-bottom">
+                        <div id="total" class="d-flex justify-content-between">
+                            <p>Total a Pagar:</p>
+                            <p id="totalSuma">$0</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-success d-block mx-auto my-2">Realizar venta</button>
                 </div>
                 <!-- Editar -->
                 <div>
