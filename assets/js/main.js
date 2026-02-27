@@ -79,21 +79,25 @@ const calcularTotal = () => {
     return venta.reduce((accum, item) => {
         const productoElegido = productos.find(producto => producto.id === item.idProducto);
         return accum + (productoElegido.precio * item.cantidad);
-    })
+    }, 0)
 }
 
 const calcularSubtotal = () => {
-    return 
+    return sinIVA * total
 }
 
-const updateCartTotals = () => {
-    const subTotal = calculateSubTotal()
-    const ivaSubTotal = calculateIVA(subTotal);
-    const total = calculateTotal(subTotal, ivaSubTotal)
+const calcularIVA = () => {
+    return IVA * total
+}
 
-    document.querySelector("#subtotalOut").textContent = formatPrice(subTotal);
-    document.querySelector("#ivaOut").textContent =   formatPrice(ivaSubTotal);
-    document.querySelector('#totalOut').textContent = formatPrice(total)
+const actualizarTotales = () => {
+    const total = calcularTotal()
+    const subtotalSinIVA = calcularSubtotal();
+    const subtotalIVA = calcularIVA()
+
+    document.querySelector('#totalSuma').textContent = formateoPrecio(total)
+    document.querySelector("#subtotalSinIVA").textContent = formateoPrecio(subtotalSinIVA);
+    document.querySelector("#subtotalIVA").textContent = formateoPrecio(subtotalIVA);
 }
 
 const agregarAVenta = (idProducto) => {
@@ -244,6 +248,7 @@ productosTbody.addEventListener("click", (event) => {
     if(action === "agregarVenta") {
         agregarAVenta(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
+        actualizarTotales()
         return;
     }
     if(action === "remover"){
