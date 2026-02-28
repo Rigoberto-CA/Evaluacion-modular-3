@@ -58,9 +58,7 @@ const productos = [
     },
 ];
 
-
 const venta = [];
-
 
 /*
 --------------------------------------
@@ -83,13 +81,14 @@ const calcularTotal = () => {
 }
 
 const calcularSubtotal = () => {
+    const total = calcularTotal();
     return sinIVA * total
 }
 
 const calcularIVA = () => {
+    const total = calcularTotal();
     return IVA * total
 }
-
 
 const actualizarTotales = () => {
     const totalVenta = calcularTotal()
@@ -99,6 +98,18 @@ const actualizarTotales = () => {
     document.querySelector('#totalSuma').textContent = formateoPrecio(totalVenta)
     document.querySelector("#subtotalSinIVA").textContent = formateoPrecio(subtotalSinIVA);
     document.querySelector("#subtotalIVA").textContent = formateoPrecio(subtotalIVA);
+}
+
+const crearProducto = (nombre, categoria, precio, stock) => {
+    const producto = {
+        id: crypto.randomUUID(),
+        nombre,
+        categoria, 
+        precio: parseInt(precio), 
+        stock: parseInt(stock)
+    }
+
+    productos.push(producto)
 }
 
 let idProductoEditado = null;
@@ -131,7 +142,6 @@ const agregarAVenta = (idProducto) => {
         if(productoVenta.cantidad === productoElegido.stock) alert("Producto sin más stock");
     }
 }
-
 
 const disminuirCantidad = (idProducto) => {
     const producto = venta.find(objeto => objeto.idProducto === idProducto);
@@ -169,7 +179,8 @@ Referencias del DOM
 const productosTbody = document.querySelector("#productosTbody");
 const carroVentas = document.querySelector("#carroVentas");
 
-const formularioEditar = document.querySelector("#formularioEditar");
+const formularioCrearCambiar = document.querySelector("#formularioCrearCambiar");
+const tituloCrearCambiar = document.querySelector("#tituloCrearCambiar");
 const campoNombre = document.querySelector("#campoNombre");
 const campoCategoria = document.querySelector("#campoCategoria");
 const campoPrecio = document.querySelector("#campoPrecio");
@@ -190,22 +201,33 @@ const crearTablaDeProductos = () => {
             <th scope="row">${producto.id.slice(0, 8)}</th>
             <td>${producto.nombre}</td>
             <td>${producto.categoria}</td>
-            <td>${producto.precio}</td>
+            <td>${formateoPrecio(producto.precio)}</td>
             <td>${producto.stock}</td>
             <td id="acciones">
                 <div class="btn-group btn-group-sm" role="group">
                     <button id="agregarVenta" 
                         data-action="agregarVenta" 
                         data-id="${producto.id}" 
-                        class="btn btn-primary">+</button>
+                        class="btn btn-primary"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom" 
+                        data-bs-title="Agregar a venta">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
                     <button id="editar" 
                         data-action="editarProducto" 
                         data-id="${producto.id}" 
-                        class="btn btn-info">e</button>
+                        class="btn btn-info"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom" 
+                        data-bs-title="Editar producto"><i class="fa-solid fa-file-pen"></i></button>
                     <button id="removerVenta" 
                         data-action="remover" 
                         data-id="${producto.id}" 
-                        class="btn btn-danger">x</button>
+                        class="btn btn-danger"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="bottom" 
+                        data-bs-title="Quitar de la venta"><i class="fa-regular fa-circle-xmark"></i></button>
                 </div>
             </td>
         </tr>`,  /*  <= Insertar HTML de la tabla de los objetos*/
@@ -257,7 +279,6 @@ const renderHTMLstring = (htmlString, container) => {
     container.innerHTML = htmlString
 }
 
-
 const renderProducts = () => {
     const tablaProductos = crearTablaDeProductos();
     renderHTMLstring(tablaProductos, productosTbody);
@@ -274,15 +295,17 @@ const cargarFormulario = (idProducto) => {
         campoPrecio.value = producto.precio;
         campoStock.value = producto.stock;
         idProductoEditado = idProducto;
-        btnActualizar.disabled = false;
+        tituloCrearCambiar.innerText = "Editando producto";
+        btnActualizar.innerText = "Actualizar";
         btnCancelar.disabled = false;
     }
 }
 
 const limpiarCampos = () => {
-    formularioEditar.reset();
+    formularioCrearCambiar.reset();
     idProductoEditado = null;
-    btnActualizar.disabled = true;
+    tituloCrearCambiar.innerText = "Agregar a inventario";
+    btnActualizar.innerText = "Guardar";
     btnCancelar.disabled = true;
 }
 
@@ -300,7 +323,7 @@ productosTbody.addEventListener("click", (event) => {
     if(action === "agregarVenta") {
         agregarAVenta(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
-        actualizarTotales()
+        actualizarTotales();
         return;
     }
     if(action === "editarProducto") {
@@ -309,6 +332,7 @@ productosTbody.addEventListener("click", (event) => {
     if(action === "remover"){
         removerProducto(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
+        actualizarTotales();
     }
 });
 
@@ -340,7 +364,7 @@ carroVentas.addEventListener("click", (event) => {
     }
 });
 
-formularioEditar.addEventListener("submit", (event) => {
+formularioCrearCambiar.addEventListener("submit", (event) => {
     event.preventDefault();
     
     const nombre = campoNombre.value.trim();
@@ -355,6 +379,9 @@ formularioEditar.addEventListener("submit", (event) => {
     if(idProductoEditado){
         editarProducto(idProductoEditado, nombre, categoria, precio, stock);
         alert(`${nombre} editado con éxito`)
+    } else {
+        crearProducto(nombre, categoria, precio, stock);
+        alert("Producto agregado al inventario")
     }
     renderProducts();
     limpiarCampos();
@@ -365,4 +392,7 @@ btnCancelar.addEventListener("click", () => {
     if(confirmarCancelar){
         limpiarCampos();
     }
-})
+});
+// Herramientas para tooltips de bootstrap
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

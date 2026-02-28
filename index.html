@@ -16,6 +16,10 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    <script 
+        defer
+        src="https://kit.fontawesome.com/c76101db1f.js" 
+        crossorigin="anonymous"></script>
     <!-- Archivos propios -->
     <link rel="stylesheet" href="./assets/css/main.css">
     <script defer src="./assets/js/main.js"></script>
@@ -76,11 +80,6 @@
                         <p class="text-light">Total del inventario:</p>
                         <p class="text-light">$n</p>
                     </div>
-                    
-                </div>
-                <!-- Sub-balance -->
-                <div>
-
                 </div>
             </div>
 
@@ -116,10 +115,10 @@
                 <!-- Editar -->
                 <div>
                     <div>
-                        <h2 class="h5">Editar producto</h2>
+                        <h2 id="tituloCrearCambiar" class="h5">Editar producto</h2>
                     </div>
                     <div>
-                        <form id="formularioEditar">
+                        <form id="formularioCrearCambiar">
                             <div class="mb-3">
                                 <label for="campoNombre" class="form-label">Nombre:</label>
                                 <input type="text" class="form-control" id="campoNombre" minlength="5" required>
@@ -137,7 +136,7 @@
                                 <input type="number" class="form-control" id="campoStock" min="0" step="1" required>
                             </div>
                             <div class="d-flex btn-group" role="group" aria-label="Basic outlined example">
-                                <button type="submit" class="btn btn-outline-primary" id="btnActualizar" disabled>Actualizar</button>
+                                <button type="submit" class="btn btn-outline-primary" id="btnActualizar">Guardar</button>
                                 <button type="button" class="btn btn-outline-primary" id="btnCancelar" disabled>Cancelar</button>
                             </div>
                         </form>
