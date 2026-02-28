@@ -90,12 +90,13 @@ const calcularIVA = () => {
     return IVA * total
 }
 
+
 const actualizarTotales = () => {
-    const total = calcularTotal()
+    const totalVenta = calcularTotal()
     const subtotalSinIVA = calcularSubtotal();
     const subtotalIVA = calcularIVA()
 
-    document.querySelector('#totalSuma').textContent = formateoPrecio(total)
+    document.querySelector('#totalSuma').textContent = formateoPrecio(totalVenta)
     document.querySelector("#subtotalSinIVA").textContent = formateoPrecio(subtotalSinIVA);
     document.querySelector("#subtotalIVA").textContent = formateoPrecio(subtotalIVA);
 }
@@ -121,7 +122,7 @@ const disminuirCantidad = (idProducto) => {
 
     producto.cantidad -= 1;
     if(producto.cantidad <= 0) {
-        const indiceProducto = venta.find(objeto => objeto.idProducto === idProducto);
+        const indiceProducto = venta.findIndex(objeto => objeto.idProducto === idProducto);
         venta.splice(indiceProducto, 1);
     }
 }
@@ -167,15 +168,21 @@ const crearTablaDeProductos = () => {
             <td>${producto.categoria}</td>
             <td>${producto.precio}</td>
             <td>${producto.stock}</td>
-            <td id="acciones" class="d-flex justify-content-evenly">
-                <button id="agregarVenta" 
-                    data-action="agregarVenta" 
-                    data-id="${producto.id}" 
-                    class="d-flex justify-content-center">+</button>
-                <button id="removerVenta" 
-                    data-action="remover" 
-                    data-id="${producto.id}" 
-                    class="d-flex justify-content-center">x</button>
+            <td id="acciones">
+                <div class="btn-group btn-group-sm" role="group">
+                    <button id="agregarVenta" 
+                        data-action="agregarVenta" 
+                        data-id="${producto.id}" 
+                        class="btn btn-primary">+</button>
+                    <button id="editar" 
+                        data-action="editarProducto" 
+                        data-id="${producto.id}" 
+                        class="btn btn-info">e</button>
+                    <button id="removerVenta" 
+                        data-action="remover" 
+                        data-id="${producto.id}" 
+                        class="btn btn-danger">x</button>
+                </div>
             </td>
         </tr>`,  /*  <= Insertar HTML de la tabla de los objetos*/
     )
