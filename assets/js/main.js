@@ -101,6 +101,22 @@ const actualizarTotales = () => {
     document.querySelector("#subtotalIVA").textContent = formateoPrecio(subtotalIVA);
 }
 
+let idProductoEditado = null;
+
+const editarProducto = (id, nombre, categoria, precio, stock) => {
+    const indiceProducto = productos.findIndex(producto => producto.id === id)
+
+    if(indiceProducto !== -1){
+        productos[indiceProducto] = {
+            id,
+            nombre,
+            categoria,
+            precio,
+            stock
+        }
+    }
+}
+
 const agregarAVenta = (idProducto) => {
     const productoElegido = productos.find(producto => producto.id === idProducto);
     
@@ -152,6 +168,14 @@ Referencias del DOM
 
 const productosTbody = document.querySelector("#productosTbody");
 const carroVentas = document.querySelector("#carroVentas");
+
+const formularioEditar = document.querySelector("#formularioEditar");
+const campoNombre = document.querySelector("#campoNombre");
+const campoCategoria = document.querySelector("#campoCategoria");
+const campoPrecio = document.querySelector("#campoPrecio");
+const campoStock = document.querySelector("#campoStock");
+const btnActualizar = document.querySelector("#btnActualizar");
+const btnCancelar = document.querySelector("#btnCancelar");
 
 /*
 --------------------------------------
@@ -220,7 +244,7 @@ const crearCarroVenta = () => {
         </li>`
         return htmlStringVenta;
     });
-    return listaVenta;
+    return listaVenta.join("");
 }
 
 /*
@@ -241,6 +265,27 @@ const renderProducts = () => {
 
 renderProducts()
 
+const cargarFormulario = (idProducto) => {
+    const producto = productos.find(producto => producto.id === idProducto)
+    
+    if(producto) {
+        campoNombre.value = producto.nombre;
+        campoCategoria.value = producto.categoria;
+        campoPrecio.value = producto.precio;
+        campoStock.value = producto.stock;
+        idProductoEditado = idProducto;
+        btnActualizar.disabled = false;
+        btnCancelar.disabled = false;
+    }
+}
+
+const limpiarCampos = () => {
+    formularioEditar.reset();
+    idProductoEditado = null;
+    btnActualizar.disabled = true;
+    btnCancelar.disabled = true;
+}
+
 /*
 --------------------------------------
 listeners
@@ -257,6 +302,9 @@ productosTbody.addEventListener("click", (event) => {
         renderHTMLstring(crearCarroVenta(), carroVentas);
         actualizarTotales()
         return;
+    }
+    if(action === "editarProducto") {
+        cargarFormulario(id)
     }
     if(action === "remover"){
         removerProducto(id);
@@ -291,3 +339,30 @@ carroVentas.addEventListener("click", (event) => {
         return
     }
 });
+
+formularioEditar.addEventListener("submit", (event) => {
+    event.preventDefault();
+    
+    const nombre = campoNombre.value.trim();
+    const categoria = campoCategoria.value.trim();
+    const precio = campoPrecio.value
+    const stock = campoStock.value
+
+    if(!nombre || !categoria || !precio || !stock){
+        alert("Completa todos los campos, por favor");
+        return;
+    } 
+    if(idProductoEditado){
+        editarProducto(idProductoEditado, nombre, categoria, precio, stock);
+        alert(`${nombre} editado con éxito`)
+    }
+    renderProducts();
+    limpiarCampos();
+});
+
+btnCancelar.addEventListener("click", () => {
+    const confirmarCancelar = confirm("Estás a punto de cancelar la edición");
+    if(confirmarCancelar){
+        limpiarCampos();
+    }
+})

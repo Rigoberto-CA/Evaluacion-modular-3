@@ -119,26 +119,26 @@
                         <h2 class="h5">Editar producto</h2>
                     </div>
                     <div>
-                        <form>
+                        <form id="formularioEditar">
                             <div class="mb-3">
                                 <label for="campoNombre" class="form-label">Nombre:</label>
-                                <input type="text" class="form-control" id="campoNombre">
+                                <input type="text" class="form-control" id="campoNombre" minlength="5" required>
                             </div>
                             <div class="mb-3">
                                 <label for="campoCategoria" class="form-label">Categoría:</label>
-                                <input type="text" class="form-control" id="campoCategoria">
+                                <input type="text" class="form-control" id="campoCategoria" minlength="2" required>
                             </div>
                             <div class="mb-3">
                                 <label for="campoPrecio" class="form-label">Precio:</label>
-                                <input type="text" class="form-control" id="campoPrecio">
+                                <input type="number" class="form-control" id="campoPrecio" min="10" step="10" required>
                             </div>
                             <div class="mb-3">
                                 <label for="campoStock" class="form-label">Stock:</label>
-                                <input type="text" class="form-control" id="campoStock">
+                                <input type="number" class="form-control" id="campoStock" min="0" step="1" required>
                             </div>
                             <div class="d-flex btn-group" role="group" aria-label="Basic outlined example">
-                                <button type="button" class="btn btn-outline-primary" id="btnActualizar">Actualizar</button>
-                                <button type="button" class="btn btn-outline-primary" id="btnCancelar">Cancelar</button>
+                                <button type="submit" class="btn btn-outline-primary" id="btnActualizar" disabled>Actualizar</button>
+                                <button type="button" class="btn btn-outline-primary" id="btnCancelar" disabled>Cancelar</button>
                             </div>
                         </form>
                     </div>
