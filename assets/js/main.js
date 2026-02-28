@@ -90,12 +90,13 @@ const calcularIVA = () => {
     return IVA * total
 }
 
+
 const actualizarTotales = () => {
-    const total = calcularTotal()
+    const totalVenta = calcularTotal()
     const subtotalSinIVA = calcularSubtotal();
     const subtotalIVA = calcularIVA()
 
-    document.querySelector('#totalSuma').textContent = formateoPrecio(total)
+    document.querySelector('#totalSuma').textContent = formateoPrecio(totalVenta)
     document.querySelector("#subtotalSinIVA").textContent = formateoPrecio(subtotalSinIVA);
     document.querySelector("#subtotalIVA").textContent = formateoPrecio(subtotalIVA);
 }
