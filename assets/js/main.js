@@ -13,7 +13,7 @@ const IVA = 0.19;
 Datos semilla
 --------------------------------------
 */
-const productos = [
+const inventario = [
     {
         id: crypto.randomUUID(),
         nombre: "Audífonos inalámbricos ARX DNC-6603",
@@ -73,9 +73,16 @@ const formateoPrecio = (precio) => {
     }).format(precio);
 }
 
+const totalInventario = () => {
+    return inventario.reduce((accum, item) => {
+        return accum + (item.precio * item.stock);
+    }, 0)
+}
+document.querySelector("#totalInventario").textContent = formateoPrecio(totalInventario());
+
 const calcularTotal = () => {
     return venta.reduce((accum, item) => {
-        const productoElegido = productos.find(producto => producto.id === item.idProducto);
+        const productoElegido = inventario.find(producto => producto.id === item.idProducto);
         return accum + (productoElegido.precio * item.cantidad);
     }, 0)
 }
@@ -94,7 +101,7 @@ const actualizarTotales = () => {
     const totalVenta = calcularTotal()
     const subtotalSinIVA = calcularSubtotal();
     const subtotalIVA = calcularIVA()
-
+    
     document.querySelector('#totalSuma').textContent = formateoPrecio(totalVenta)
     document.querySelector("#subtotalSinIVA").textContent = formateoPrecio(subtotalSinIVA);
     document.querySelector("#subtotalIVA").textContent = formateoPrecio(subtotalIVA);
@@ -109,16 +116,16 @@ const crearProducto = (nombre, categoria, precio, stock) => {
         stock: parseInt(stock)
     }
 
-    productos.push(producto)
+    inventario.push(producto)
 }
 
 let idProductoEditado = null;
 
 const editarProducto = (id, nombre, categoria, precio, stock) => {
-    const indiceProducto = productos.findIndex(producto => producto.id === id)
+    const indiceProducto = inventario.findIndex(producto => producto.id === id)
 
     if(indiceProducto !== -1){
-        productos[indiceProducto] = {
+        inventario[indiceProducto] = {
             id,
             nombre,
             categoria,
@@ -129,7 +136,7 @@ const editarProducto = (id, nombre, categoria, precio, stock) => {
 }
 
 const agregarAVenta = (idProducto) => {
-    const productoElegido = productos.find(producto => producto.id === idProducto);
+    const productoElegido = inventario.find(producto => producto.id === idProducto);
     
     if(productoElegido.stock === 0) alert("Producto sin stock");
 
@@ -138,7 +145,7 @@ const agregarAVenta = (idProducto) => {
     if(!productoVenta && productoElegido.stock > 0){
         venta.push({idProducto, cantidad: 1});
     } else {
-        if(productoVenta.cantidad < productoElegido.stock) productoVenta.cantidad += 1;
+        if(productoVenta.cantidad < productoElegido.stock) productoVenta.cantidad++;
         if(productoVenta.cantidad === productoElegido.stock) alert("Producto sin más stock");
     }
 }
@@ -146,7 +153,7 @@ const agregarAVenta = (idProducto) => {
 const disminuirCantidad = (idProducto) => {
     const producto = venta.find(objeto => objeto.idProducto === idProducto);
 
-    producto.cantidad -= 1;
+    producto.cantidad--;
     if(producto.cantidad <= 0) {
         const indiceProducto = venta.findIndex(objeto => objeto.idProducto === idProducto);
         venta.splice(indiceProducto, 1);
@@ -154,11 +161,11 @@ const disminuirCantidad = (idProducto) => {
 }
 
 const incrementarCantidad = (idProducto) => {
-    const producto = productos.find(objeto => objeto.id === idProducto);
+    const producto = inventario.find(objeto => objeto.id === idProducto);
     const productoVenta = venta.find(objeto => objeto.idProducto === idProducto);
 
     if(productoVenta.cantidad < producto.stock){
-        productoVenta.cantidad += 1; //revisar al final si sirve reemplazar con ++
+        productoVenta.cantidad++;
     } else {
         alert("Producto sin stock");
     }
@@ -195,7 +202,7 @@ creación de los HTML a insertar
 */
 
 const crearTablaDeProductos = () => {
-    const tablaDelArreglo = productos.map(
+    const tablaDelArreglo = inventario.map(
         (producto) => `
         <tr>
             <th scope="row">${producto.id.slice(0, 8)}</th>
@@ -237,7 +244,7 @@ const crearTablaDeProductos = () => {
 
 const crearCarroVenta = () => {
     const listaVenta = venta.map(objeto => {
-        const productoVenta = productos.find(producto => producto.id === objeto.idProducto);
+        const productoVenta = inventario.find(producto => producto.id === objeto.idProducto);
 
         const htmlStringVenta = `
         <li class="list-group-item">
@@ -287,7 +294,7 @@ const renderProducts = () => {
 renderProducts()
 
 const cargarFormulario = (idProducto) => {
-    const producto = productos.find(producto => producto.id === idProducto)
+    const producto = inventario.find(producto => producto.id === idProducto)
     
     if(producto) {
         campoNombre.value = producto.nombre;
@@ -345,21 +352,21 @@ carroVentas.addEventListener("click", (event) => {
     if(action === 'disminuirCantidad') {
         disminuirCantidad(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
-        //updateCartTotals();
+        actualizarTotales();
         return;
     }
 
     if(action === 'incrementarCantidad') {
         incrementarCantidad(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
-        //updateCartTotals();
+        actualizarTotales();
         return
     }
 
     if(action === "removerDeVenta") {
         removerProducto(id);
         renderHTMLstring(crearCarroVenta(), carroVentas);
-        //updateCartTotals();
+        actualizarTotales();
         return
     }
 });
@@ -369,8 +376,8 @@ formularioCrearCambiar.addEventListener("submit", (event) => {
     
     const nombre = campoNombre.value.trim();
     const categoria = campoCategoria.value.trim();
-    const precio = campoPrecio.value
-    const stock = campoStock.value
+    const precio = campoPrecio.value;
+    const stock = campoStock.value;
 
     if(!nombre || !categoria || !precio || !stock){
         alert("Completa todos los campos, por favor");
@@ -378,10 +385,10 @@ formularioCrearCambiar.addEventListener("submit", (event) => {
     } 
     if(idProductoEditado){
         editarProducto(idProductoEditado, nombre, categoria, precio, stock);
-        alert(`${nombre} editado con éxito`)
+        alert(`${nombre} editado con éxito`);
     } else {
         crearProducto(nombre, categoria, precio, stock);
-        alert("Producto agregado al inventario")
+        alert("Producto agregado al inventario");
     }
     renderProducts();
     limpiarCampos();
@@ -393,6 +400,7 @@ btnCancelar.addEventListener("click", () => {
         limpiarCampos();
     }
 });
+
 // Herramientas para tooltips de bootstrap
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

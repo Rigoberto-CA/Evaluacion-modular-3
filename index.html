@@ -33,9 +33,7 @@
 
     <div class="container-fluid">
         <div class="row g-2">
-            <!-- Sección de productos -->
             <div class="col-8 border border-primary-subtle rounded-start">
-                <!-- Productos -->
                 <div>
                     <table class="table">
                         <caption>Inventario</caption>
@@ -46,7 +44,7 @@
                                 <th scope="col">Categoría</th>
                                 <th scope="col">Precio</th>
                                 <th scope="col">Stock</th>
-                                <th scope="col">Acciones<!--Acciones--></th>
+                                <th scope="col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="productosTbody"> <!-- Acá se agregaran los productos desde JavaScript -->
@@ -78,13 +76,12 @@
                     </table>
                     <div class="bg-primary d-flex justify-content-between px-2 pt-2 bg-primary text-white rounded">
                         <p class="text-light">Total del inventario:</p>
-                        <p class="text-light">$n</p>
+                        <p class="text-light" id="totalInventario">$n</p>
                     </div>
                 </div>
             </div>
 
             <div class="col-4 border border-primary-subtle rounded-end">
-                <!-- Ventas -->
                 <div>
                     <div>
                         <h2 class="h5">Ventas</h2>
@@ -142,14 +139,7 @@
                         </form>
                     </div>
                 </div>
-                <!-- Balance -->
-                <div>
-
-                </div>
             </div>
-        </div>
-        <div class="row">
-            
         </div>
     </div>
 </body>
